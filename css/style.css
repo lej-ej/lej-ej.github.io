@@ -1,12 +1,12 @@
 :root {
-  --bg: #ccc9a5;
-  --ink: #182415;
-  --muted: #3f5236;
-  --faint: #6d6f52;
-  --rule: #a29f7c;
-  --accent: #7a3a1a;
-  --vine: #253a20;
-  --leaf: #3d5c33;
+  --bg: #93a582;
+  --ink: #0f1a0d;
+  --muted: #2f4225;
+  --faint: #5a6d4e;
+  --rule: #728166;
+  --accent: #8a3d1c;
+  --vine: #14200f;
+  --leaf: #2f4a24;
   --content-width: 900px;
   --label-width: 160px;
   --gutter: 3rem;
@@ -92,12 +92,12 @@ hr.rule {
 .vine {
   position: absolute;
   top: 0;
-  height: 100%;
-  width: 130px;
+  width: 110px;
+  overflow: visible;
 }
 
-.vine-left  { left:  max(1rem, calc((100vw - var(--content-width)) / 2 - 140px)); }
-.vine-right { right: max(1rem, calc((100vw - var(--content-width)) / 2 - 140px)); }
+.vine-left  { left:  max(1rem, calc((100vw - var(--content-width)) / 2 - 120px)); }
+.vine-right { right: max(1rem, calc((100vw - var(--content-width)) / 2 - 120px)); }
 
 .vine-main {
   fill: none;
@@ -430,9 +430,13 @@ hr.rule {
   z-index: 1;
 }
 
-/* ── narrow screens: hide vines, single-column ─────── */
-@media (max-width: 819px) {
+/* ── smaller desktop: hide vines to avoid content overlap ─── */
+@media (max-width: 1049px) {
   .vines { display: none; }
+}
+
+/* ── narrow screens: single-column ─────────────────── */
+@media (max-width: 819px) {
   html { font-size: 16px; }
   .hero h1 { font-size: 2.2rem; }
   h1 { font-size: 2.2rem; }
