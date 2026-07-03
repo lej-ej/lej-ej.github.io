@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private — Leja Ejury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="logo">Leja Ejury</a>
+    <nav>
+      <a href="index.html">About</a>
+      <a href="blog.html">Blog</a>
+      <a href="private.html" class="active">Private</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="gate" class="gate">
+      <h1>Private</h1>
+      <p class="lede">
+        This area is password-protected.
+      </p>
+      <form id="gate-form" class="gate-form" autocomplete="off">
+        <label for="pw">Password</label>
+        <input type="password" id="pw" name="pw" required autofocus />
+        <button type="submit">Unlock</button>
+        <p id="gate-error" class="gate-error" hidden>Wrong password.</p>
+      </form>
+      <p class="note">
+        Note: this is a client-side gate. It hides content from casual
+        visitors, but anyone technical can view the source. Don't put
+        real secrets here.
+      </p>
+    </section>
+
+    <section id="content" class="private-content" hidden>
+      <h1>Private notes</h1>
+      <p class="lede">Welcome. This area is only for me.</p>
+
+      <article>
+        <h2>Journal</h2>
+        <p>
+          Add whatever you want here — private notes, drafts, a running
+          journal. Edit <code>private.html</code> to change this.
+        </p>
+      </article>
+
+      <p><button id="lock-btn" class="lock-btn">Lock again</button></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Leja Ejury</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/gate.js"></script>
+</body>
+</html>
