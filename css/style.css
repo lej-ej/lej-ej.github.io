@@ -1,12 +1,13 @@
 :root {
-  --bg: #93a582;
-  --ink: #0f1a0d;
-  --muted: #2f4225;
-  --faint: #5a6d4e;
-  --rule: #728166;
-  --accent: #8a3d1c;
-  --vine: #14200f;
-  --leaf: #2f4a24;
+  --bg: #0a1626;
+  --ink: #dcbe66;
+  --muted: #a68840;
+  --faint: #75623a;
+  --rule: #3a2e18;
+  --accent: #f4d689;
+  --gold-bright: #f4d689;
+  --gold-mid: #e5c76a;
+  --gold-deep: #b89a52;
   --content-width: 900px;
   --label-width: 160px;
   --gutter: 3rem;
@@ -25,7 +26,7 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
   color: var(--ink);
   font-family: 'Lekton', 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
   line-height: 1.65;
@@ -34,6 +35,23 @@ body {
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
+}
+
+/* ── painterly brushstroke background layer ────────── */
+.bg-texture {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bg-texture svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 h1, h2, h3 {
@@ -65,10 +83,11 @@ a:hover {
 em { font-style: italic; }
 code {
   font-family: inherit;
-  background: rgba(63, 90, 55, 0.1);
+  background: rgba(244, 214, 137, 0.12);
   padding: 0.05em 0.35em;
   border-radius: 3px;
   font-size: 0.92em;
+  color: var(--gold-bright);
 }
 
 hr.rule {
@@ -77,83 +96,48 @@ hr.rule {
   margin: 3rem 0;
 }
 
-/* ── vines: fixed, ornamental, scroll-driven ───────── */
-.vine {
+/* ── gold brushstroke spiral ───────────────────────── */
+.spiral {
   position: fixed;
   top: 0;
-  width: 240px;
+  left: -30px;
+  width: 220px;
   height: 100vh;
   pointer-events: none;
-  z-index: 3;
+  z-index: 0;
   overflow: visible;
 }
 
-.vine-left  { left: -60px; }
-.vine-right { right: -60px; transform: scaleX(-1); }
-
-.vine svg {
+.spiral svg {
   width: 100%;
   height: 100%;
   overflow: visible;
   display: block;
 }
 
-.main-vine {
+.spiral-under,
+.spiral-main,
+.spiral-highlight {
   fill: none;
-  stroke: #1a3315;
-  stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.tendril {
-  fill: none;
-  stroke: #2a4a24;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.spiral-under {
+  stroke: var(--gold-deep);
+  stroke-width: 18;
+  opacity: 0.35;
 }
 
-.leaf {
-  fill: #4e8f48;
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.5s ease;
+.spiral-main {
+  stroke: url(#gold-grad);
+  stroke-width: 9;
 }
 
-.flower {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.6s ease;
-}
-
-.flower circle:nth-child(1) { fill: #f6b8d2; }
-.flower circle:nth-child(2) { fill: #c6b7ff; }
-.flower circle:nth-child(3) { fill: #ffe88b; }
-.flower circle:nth-child(4) { fill: #b7f0b5; }
-.flower circle:nth-child(5) { fill: #ffd0b4; }
-.flower circle:nth-child(6) { fill: #e8c7ff; }
-.flower .flower-center { fill: #ffd84a; }
-
-.pollen {
-  fill: #ffd84a;
-  opacity: 0;
-  filter: drop-shadow(0 0 4px rgba(255, 216, 74, 0.7));
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.8s ease;
-}
-
-.pollen.revealed {
-  opacity: 0.85;
-  animation: pollen-drift 5s ease-in-out infinite alternate;
-}
-
-@keyframes pollen-drift {
-  from { translate: 0 8px; }
-  to   { translate: 0 -8px; }
+.spiral-highlight {
+  stroke: var(--gold-bright);
+  stroke-width: 3.5;
+  opacity: 0.75;
 }
 
 /* ── header ────────────────────────────────────────── */
@@ -395,13 +379,13 @@ hr.rule {
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
-  background: #fbf7ea;
+  background: rgba(244, 214, 137, 0.08);
   color: var(--ink);
 }
 
 .gate-form input:focus {
   outline: none;
-  border-color: var(--vine);
+  border-color: var(--accent);
 }
 
 .gate-form button,
@@ -452,9 +436,9 @@ hr.rule {
   z-index: 1;
 }
 
-/* ── smaller desktop: hide vines to avoid content overlap ─── */
-@media (max-width: 1149px) {
-  .vine { display: none; }
+/* ── smaller desktop: hide spiral to avoid content overlap ─── */
+@media (max-width: 1249px) {
+  .spiral { display: none; }
 }
 
 /* ── narrow screens: single-column ─────────────────── */
