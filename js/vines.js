@@ -1,134 +1,140 @@
-// Painterly dark-blue background + gold brushstroke spiral.
+// Painterly, abstract-expressionist, angular, nature-focused decor.
 //
-// - Background: fixed SVG with soft blue brushstroke shapes + noise
-//   turbulence for a hand-painted feel.
-// - Spiral: fixed SVG on the left with a helix path drawn in gold.
-//   The path is rendered as three layered strokes (soft underlay,
-//   main gradient, bright highlight) and distorted by an SVG
-//   turbulence filter for a brushstroke edge. Draws itself via
-//   stroke-dashoffset as the user scrolls.
+//   1. Full-viewport canvas background: layered oil-pigment washes
+//      (ochre / moss / slate / earth) on a deep-pine base, then a
+//      fine turbulence noise for canvas grain.
+//   2. Hero landscape art: layered angular polygon "mountains" with
+//      hand-painted edges (feDisplacementMap on feTurbulence).
+//   3. Painterly angular section rules: irregular jagged strokes
+//      between sections.
 
 (function () {
-  // ────────────────────────────────────────────────────────
-  // Background painterly layer
-  // ────────────────────────────────────────────────────────
-  function buildBackground() {
+  // ── Deterministic helper for painterly filter seeds ───────
+  let seedCounter = 3;
+  function seed() { return seedCounter++; }
+
+  // ── 1. Canvas background ─────────────────────────────────
+  function buildCanvasBg() {
     return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
       <defs>
-        <filter id="bg-noise" x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
-          <feColorMatrix values="0 0 0 0 0.95
-                                 0 0 0 0 0.85
-                                 0 0 0 0 0.55
-                                 0 0 0 0.06 0"/>
+        <filter id="canvas-noise" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4"/>
+          <feColorMatrix values="0 0 0 0 0.92
+                                 0 0 0 0 0.86
+                                 0 0 0 0 0.72
+                                 0 0 0 0.07 0"/>
         </filter>
-        <filter id="brush-soft" x="-10%" y="-10%" width="120%" height="120%">
-          <feGaussianBlur stdDeviation="1.2"/>
+        <filter id="wash" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2"/>
         </filter>
       </defs>
-      <rect width="100" height="100" fill="#0a1626"/>
-      <ellipse cx="18" cy="22" rx="42" ry="9"  fill="#152645" opacity="0.55" transform="rotate(-14 18 22)" filter="url(#brush-soft)"/>
-      <ellipse cx="72" cy="38" rx="45" ry="10" fill="#0e1c33" opacity="0.55" transform="rotate(18 72 38)"  filter="url(#brush-soft)"/>
-      <ellipse cx="25" cy="58" rx="40" ry="8"  fill="#1a2b4a" opacity="0.45" transform="rotate(-8 25 58)"  filter="url(#brush-soft)"/>
-      <ellipse cx="80" cy="72" rx="42" ry="9"  fill="#111f38" opacity="0.55" transform="rotate(22 80 72)"  filter="url(#brush-soft)"/>
-      <ellipse cx="40" cy="88" rx="45" ry="9"  fill="#162743" opacity="0.5"  transform="rotate(-4 40 88)"  filter="url(#brush-soft)"/>
-      <ellipse cx="88" cy="8"  rx="30" ry="6"  fill="#1a2c4c" opacity="0.4"  transform="rotate(10 88 8)"   filter="url(#brush-soft)"/>
-      <rect width="100" height="100" filter="url(#bg-noise)"/>
+      <rect width="100" height="100" fill="#1a1f19"/>
+      <!-- broad painterly washes, tilted and overlapping -->
+      <ellipse cx="20" cy="18" rx="55" ry="12" fill="#3d5266" opacity="0.28" transform="rotate(-14 20 18)" filter="url(#wash)"/>
+      <ellipse cx="78" cy="30" rx="60" ry="14" fill="#4a6b3e" opacity="0.22" transform="rotate(11 78 30)"  filter="url(#wash)"/>
+      <ellipse cx="30" cy="52" rx="55" ry="11" fill="#c8843a" opacity="0.15" transform="rotate(-6 30 52)"  filter="url(#wash)"/>
+      <ellipse cx="82" cy="70" rx="60" ry="13" fill="#8a3a24" opacity="0.16" transform="rotate(19 82 70)"  filter="url(#wash)"/>
+      <ellipse cx="20" cy="88" rx="55" ry="10" fill="#3d5266" opacity="0.24" transform="rotate(-4 20 88)"  filter="url(#wash)"/>
+      <!-- fine canvas grain -->
+      <rect width="100" height="100" filter="url(#canvas-noise)"/>
     </svg>`;
   }
 
-  const bg = document.querySelector('.bg-texture');
-  if (bg) bg.innerHTML = buildBackground();
-
-  // ────────────────────────────────────────────────────────
-  // Gold brushstroke spiral
-  // ────────────────────────────────────────────────────────
-  // Generate a corkscrew helix path descending down the SVG.
-  function spiralPath() {
-    const cx = 115;         // horizontal center (viewBox units)
-    const startY = 60;
-    const rx = 60;          // horizontal amplitude
-    const ry = 45;          // vertical amplitude (squished for descent)
-    const turns = 7;        // full loops
-    const descentPerRad = 22; // vertical descent per radian
-    const totalRad = turns * 2 * Math.PI;
-    const steps = turns * 60; // resolution per turn
-
-    const pts = [];
-    for (let i = 0; i <= steps; i++) {
-      const theta = (i / steps) * totalRad;
-      const x = cx + Math.cos(theta) * rx;
-      const y = startY + Math.sin(theta) * ry + descentPerRad * theta;
-      pts.push([x.toFixed(2), y.toFixed(2)]);
-    }
-
-    // Smooth path via successive line segments — dense enough to look curved.
-    let d = `M ${pts[0][0]} ${pts[0][1]}`;
-    for (let i = 1; i < pts.length; i++) {
-      d += ` L ${pts[i][0]} ${pts[i][1]}`;
-    }
-    return d;
-  }
-
-  function buildSpiral() {
-    const d = spiralPath();
-    return `<svg viewBox="0 0 230 1400" preserveAspectRatio="xMidYMin meet">
+  // ── 2. Hero landscape (angular painterly mountains) ─────
+  function buildHeroArt() {
+    const s1 = seed();
+    const s2 = seed();
+    const s3 = seed();
+    return `<svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice">
       <defs>
-        <linearGradient id="gold-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#f4d689"/>
-          <stop offset="45%"  stop-color="#e5c76a"/>
-          <stop offset="100%" stop-color="#a88540"/>
-        </linearGradient>
-        <filter id="brush" x="-8%" y="-2%" width="116%" height="104%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="9"/>
-          <feDisplacementMap in="SourceGraphic" scale="5.5"/>
+        <filter id="paint-rough-a" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="${s1}"/>
+          <feDisplacementMap in="SourceGraphic" scale="8"/>
+        </filter>
+        <filter id="paint-rough-b" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="${s2}"/>
+          <feDisplacementMap in="SourceGraphic" scale="10"/>
+        </filter>
+        <filter id="paint-rough-c" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="${s3}"/>
+          <feDisplacementMap in="SourceGraphic" scale="6"/>
         </filter>
       </defs>
-      <g filter="url(#brush)">
-        <path class="spiral-under"     d="${d}"/>
-        <path class="spiral-main"      d="${d}"/>
-        <path class="spiral-highlight" d="${d}"/>
+      <!-- painterly sun/moon offset right -->
+      <circle cx="920" cy="220" r="130" fill="#d4a02c" opacity="0.55" filter="url(#paint-rough-a)"/>
+      <circle cx="920" cy="220" r="90" fill="#d78535" opacity="0.35" filter="url(#paint-rough-a)"/>
+
+      <!-- back mountain range: slate blue -->
+      <polygon
+        points="0,700 0,520 120,380 260,470 400,340 540,430 680,300 820,410 960,320 1100,400 1200,340 1200,700"
+        fill="#3d5266" opacity="0.7"
+        filter="url(#paint-rough-b)"/>
+
+      <!-- mid mountain range: moss green -->
+      <polygon
+        points="0,700 0,570 100,450 240,540 380,420 520,510 660,400 800,490 940,410 1080,500 1200,430 1200,700"
+        fill="#4a6b3e" opacity="0.78"
+        filter="url(#paint-rough-b)"/>
+
+      <!-- front mountain range: ochre / earth -->
+      <polygon
+        points="0,700 0,620 130,530 280,590 420,510 560,580 700,500 840,570 980,510 1120,580 1200,540 1200,700"
+        fill="#8a3a24" opacity="0.82"
+        filter="url(#paint-rough-c)"/>
+
+      <!-- closest silhouette: near-black pine -->
+      <polygon
+        points="0,700 0,660 160,610 320,660 470,600 620,640 770,590 920,650 1080,620 1200,670 1200,700"
+        fill="#1a1f19" opacity="0.9"
+        filter="url(#paint-rough-c)"/>
+
+      <!-- angular gestural brushstrokes -->
+      <path d="M 80 130 L 260 90 L 300 170 L 100 200 Z" fill="#c8843a" opacity="0.35" filter="url(#paint-rough-a)"/>
+      <path d="M 780 90 L 890 130 L 830 180 L 720 150 Z" fill="#4a6b3e" opacity="0.28" filter="url(#paint-rough-a)"/>
+      <path d="M 380 70 L 500 100 L 460 160 L 340 130 Z" fill="#eadcb8" opacity="0.14" filter="url(#paint-rough-a)"/>
+    </svg>`;
+  }
+
+  // ── 3. Painterly angular rule between sections ──────────
+  function buildPainterlyRule(colorKey) {
+    const colors = {
+      ochre: '#c8843a',
+      moss:  '#4a6b3e',
+      slate: '#3d5266',
+      earth: '#8a3a24',
+      bone:  '#eadcb8',
+    };
+    const c = colors[colorKey] || '#c8843a';
+    const s = seed();
+    // Angular jagged line as a polyline, painterly filter for rough edges.
+    return `<svg viewBox="0 0 1000 60" preserveAspectRatio="none">
+      <defs>
+        <filter id="rule-brush-${s}" x="-5%" y="-30%" width="110%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="${s}"/>
+          <feDisplacementMap in="SourceGraphic" scale="6"/>
+        </filter>
+      </defs>
+      <g filter="url(#rule-brush-${s})">
+        <polyline
+          points="0,30 80,15 180,40 300,20 420,45 540,15 660,40 800,20 900,42 1000,25"
+          fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        <polyline
+          points="30,42 140,32 260,50 380,30 500,52 620,28 740,50 880,32 970,48"
+          fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
       </g>
     </svg>`;
   }
 
-  const spiralEl = document.querySelector('.spiral');
-  if (spiralEl) {
-    spiralEl.innerHTML = buildSpiral();
+  // ── Inject into DOM ─────────────────────────────────────
+  const bg = document.querySelector('.canvas-bg');
+  if (bg) bg.innerHTML = buildCanvasBg();
 
-    // Measure path lengths and set up dashoffsets.
-    const layers = spiralEl.querySelectorAll('.spiral-under, .spiral-main, .spiral-highlight');
-    layers.forEach((p) => {
-      const len = p.getTotalLength();
-      p.dataset.length = String(len);
-      p.style.strokeDasharray = String(len);
-      p.style.strokeDashoffset = String(len);
-    });
+  const heroArt = document.querySelector('.hero-art');
+  if (heroArt) heroArt.innerHTML = buildHeroArt();
 
-    function scrollProgress() {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max <= 0) return 1;
-      return Math.max(0, Math.min(1, window.scrollY / max));
-    }
-
-    function update() {
-      const p = scrollProgress();
-      layers.forEach((path) => {
-        const len = parseFloat(path.dataset.length);
-        path.style.strokeDashoffset = String(len * (1 - p));
-      });
-    }
-
-    let ticking = false;
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(() => { update(); ticking = false; });
-        ticking = true;
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    window.addEventListener('load', update);
-    update();
-  }
+  // Sprinkle painterly rules — rotate palette
+  const paletteCycle = ['ochre', 'moss', 'slate', 'earth', 'bone'];
+  document.querySelectorAll('.painterly-rule').forEach((el, i) => {
+    el.innerHTML = buildPainterlyRule(paletteCycle[i % paletteCycle.length]);
+  });
 })();
