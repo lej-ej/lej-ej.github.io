@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Private — Leja Ejury</title>
+  <title>private — notes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header class="site-header">
-    <a href="index.html" class="logo">Leja Ejury</a>
+    <a href="index.html" class="logo">notes</a>
     <nav>
-      <a href="index.html">About</a>
-      <a href="blog.html">Blog</a>
-      <a href="private.html" class="active">Private</a>
+      <a href="index.html">home</a>
+      <a href="blog.html">writing</a>
+      <a href="private.html" class="active">private</a>
     </nav>
   </header>
 
   <main class="container">
     <section id="gate" class="gate">
-      <h1>Private</h1>
+      <h1>private</h1>
       <p class="lede">
         This area is password-protected.
       </p>
       <form id="gate-form" class="gate-form" autocomplete="off">
-        <label for="pw">Password</label>
+        <label for="pw">password</label>
         <input type="password" id="pw" name="pw" required autofocus />
-        <button type="submit">Unlock</button>
+        <button type="submit">unlock</button>
         <p id="gate-error" class="gate-error" hidden>Wrong password.</p>
       </form>
       <p class="note">
@@ -39,23 +39,24 @@
     </section>
 
     <section id="content" class="private-content" hidden>
-      <h1>Private notes</h1>
-      <p class="lede">Welcome. This area is only for me.</p>
+      <h1>private notes</h1>
+      <p class="lede">Draft space. Only for me.</p>
 
       <article>
         <h2>Journal</h2>
         <p>
-          Add whatever you want here — private notes, drafts, a running
-          journal. Edit <code>private.html</code> to change this.
+          Add whatever you want here &mdash; private drafts, a running
+          journal, half-formed thoughts. Edit <code>private.html</code>
+          to change this.
         </p>
       </article>
 
-      <p><button id="lock-btn" class="lock-btn">Lock again</button></p>
+      <p><button id="lock-btn" class="lock-btn">lock again</button></p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>&copy; <span id="year"></span> Leja Ejury</p>
+    <p>&copy; <span id="year"></span></p>
   </footer>
 
   <script src="js/main.js"></script>

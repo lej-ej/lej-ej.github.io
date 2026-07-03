@@ -3,192 +3,134 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Leja Ejury</title>
-  <meta name="description" content="Leja Ejury — data science and public policy student at the University of Chicago." />
+  <title>notes</title>
+  <meta name="description" content="A creative space for writing, ideas, and things being built." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="vines" aria-hidden="true">
+    <svg class="vine vine-left" viewBox="0 0 100 5000" preserveAspectRatio="xMidYMin slice">
+      <path class="vine-path" d="M 60 0 Q 20 200 60 400 T 60 800 T 60 1200 T 60 1600 T 60 2000 T 60 2400 T 60 2800 T 60 3200 T 60 3600 T 60 4000 T 60 4400 T 60 4800" />
+      <g class="leaves">
+        <path class="leaf" data-threshold="0.05" transform="translate(30 400) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.14" transform="translate(85 800) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.24" transform="translate(30 1200) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.34" transform="translate(85 1600) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.44" transform="translate(30 2000) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.54" transform="translate(85 2400) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.64" transform="translate(30 2800) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.74" transform="translate(85 3200) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.84" transform="translate(30 3600) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.94" transform="translate(85 4000) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+      </g>
+    </svg>
+    <svg class="vine vine-right" viewBox="0 0 100 5000" preserveAspectRatio="xMidYMin slice">
+      <path class="vine-path" d="M 40 0 Q 80 200 40 400 T 40 800 T 40 1200 T 40 1600 T 40 2000 T 40 2400 T 40 2800 T 40 3200 T 40 3600 T 40 4000 T 40 4400 T 40 4800" />
+      <g class="leaves">
+        <path class="leaf" data-threshold="0.09" transform="translate(70 400) rotate(30)"   d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.19" transform="translate(15 800) rotate(-35)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.29" transform="translate(70 1200) rotate(30)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.39" transform="translate(15 1600) rotate(-35)" d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.49" transform="translate(70 2000) rotate(30)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.59" transform="translate(15 2400) rotate(-35)" d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.69" transform="translate(70 2800) rotate(30)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.79" transform="translate(15 3200) rotate(-35)" d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.89" transform="translate(70 3600) rotate(30)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.98" transform="translate(15 4000) rotate(-35)" d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+      </g>
+    </svg>
+  </div>
+
   <header class="site-header">
-    <a href="index.html" class="logo">Leja Ejury</a>
+    <a href="index.html" class="logo">notes</a>
     <nav>
-      <a href="index.html" class="active">About</a>
-      <a href="blog.html">Blog</a>
-      <a href="private.html">Private</a>
+      <a href="index.html" class="active">home</a>
+      <a href="blog.html">writing</a>
+      <a href="private.html">private</a>
     </nav>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>Hi, I'm Leja.</h1>
+      <h1>a small workspace.</h1>
       <p class="lede">
-        I'm a data science and public policy student at the
-        University of Chicago. Right now I'm running A/B tests and NLP
-        analyses on user engagement at
-        <a href="https://careervillage.org">CareerVillage</a>, and
-        writing a column on U.S.&ndash;Mexico border relations for
-        <em>The Gate</em>.
-      </p>
-      <p class="lede">
-        I care about using data to make policy decisions less bad,
-        especially in immigration and human rights. I grew up between
-        the U.S. and Germany, which is probably why.
+        Writing, half-formed ideas, and links to things being built.
+        Everything here is a draft &mdash; some of it might grow into
+        something, most of it won't.
       </p>
     </section>
 
     <hr class="rule" />
 
     <section>
-      <p class="section-label">Now</p>
-      <ul class="now-list">
-        <li>Interning at CareerVillage as a Research Analyst and Data Science Intern.</li>
-        <li>Writing a column on international policy at <em>The Gate</em>.</li>
-        <li>Co-directing the Society for International Relations at UChicago.</li>
-      </ul>
-    </section>
-
-    <hr class="rule" />
-
-    <section>
-      <p class="section-label">Experience</p>
-      <ol class="work-list">
-        <li>
-          <div class="work-head">
-            <span class="work-company">CareerVillage</span>
-            <span class="work-dates">Jun 2025 &ndash; Present</span>
-          </div>
-          <p class="work-role">Research Analyst, Data Science Intern &middot; Remote</p>
-          <ul class="work-details">
-            <li>Designed and ran an A/B test evaluating platform impact, querying user engagement data in SQL and surveying 4,000+ participants to generate outcome metrics used to optimize user experience.</li>
-            <li>Ran NLP analyses in Python using transformer-based sentiment models to evaluate response quality and patterns; built data reports and dashboards for stakeholders and funders.</li>
-            <li>Built Python pipelines for preprocessing, feature extraction, and model evaluation.</li>
-          </ul>
-        </li>
-
-        <li>
-          <div class="work-head">
-            <span class="work-company">The World Bank</span>
-            <span class="work-dates">Jun 2025 &ndash; Oct 2025</span>
-          </div>
-          <p class="work-role">Data Analytics and Research Intern, Data and Analytics Global Solutions Group &middot; Washington, DC</p>
-          <ul class="work-details">
-            <li>Helped define the emerging field of human rights economics by integrating legal frameworks with quantitative economic methods to develop actionable policy recommendations.</li>
-            <li>Ran sentiment analysis using BERT via Hugging Face to extract thematic trends across 120+ reports, and authored interdisciplinary literature reviews to guide policy strategy.</li>
-          </ul>
-        </li>
-
-        <li>
-          <div class="work-head">
-            <span class="work-company">Illinois Coalition for Immigrant and Refugee Rights</span>
-            <span class="work-dates">Nov 2023 &ndash; Mar 2025</span>
-          </div>
-          <p class="work-role">Family Support Network Intern, Administrative Intern &middot; Chicago, IL</p>
-          <ul class="work-details">
-            <li>Guided 1,000+ Spanish-speaking residents through aid programs; designed training materials and led onboarding for two intern cohorts.</li>
-            <li>Researched Cultural Competency and Know Your Rights topics and compiled in-depth trainings for schools and workplaces across Illinois.</li>
-          </ul>
-        </li>
-
-        <li>
-          <div class="work-head">
-            <span class="work-company">Founderland</span>
-            <span class="work-dates">May 2024 &ndash; Aug 2024</span>
-          </div>
-          <p class="work-role">Venture Capital Strategy and Engagement Intern &middot; Berlin, Germany</p>
-          <ul class="work-details">
-            <li>Built a living membership spreadsheet and used Python to gather demographic data, supporting grant applications and strategic planning.</li>
-            <li>Led SEO creation and optimization to boost Google search rankings.</li>
-            <li>Managed the organization's LinkedIn (10,000 followers) and Instagram (2,400 followers); doubled Project Gendex's Twitter following.</li>
-          </ul>
-        </li>
-      </ol>
-    </section>
-
-    <hr class="rule" />
-
-    <section>
-      <p class="section-label">Leadership</p>
-      <ol class="work-list">
-        <li>
-          <div class="work-head">
-            <span class="work-company">The Gate, UChicago</span>
-            <span class="work-dates">Jun 2024 &ndash; Present</span>
-          </div>
-          <p class="work-role">Senior Columnist</p>
-          <ul class="work-details">
-            <li>Write in-depth columns and long-form reports on international policy, with a focus on U.S.&ndash;Mexico border relations.</li>
-            <li>Lead discussions at the Institute of Politics on policy and current affairs.</li>
-          </ul>
-        </li>
-
-        <li>
-          <div class="work-head">
-            <span class="work-company">Society for International Relations at UChicago</span>
-            <span class="work-dates">Sep 2023 &ndash; Present</span>
-          </div>
-          <p class="work-role">Co-Director; North and Central America Regional Analyst</p>
-          <ul class="work-details">
-            <li>Analyze North and Central American politics, economics, and human rights.</li>
-            <li>Author weekly news-blasts for the UChicago community.</li>
-          </ul>
-        </li>
-      </ol>
-    </section>
-
-    <hr class="rule" />
-
-    <section>
-      <p class="section-label">Education</p>
-      <div class="edu">
-        <div class="work-head">
-          <span class="work-company">The University of Chicago</span>
-          <span class="work-dates">Expected Jun 2027</span>
-        </div>
-        <p class="work-role">B.S. Data Science and B.A. Public Policy &middot; GPA 3.97/4.00</p>
-        <p class="edu-honors">
-          Dean's List 2023&ndash;2024. Harper Award for Exceptional
-          Performance in Quantitative Methods for Public Policy.
-        </p>
-        <p class="edu-honors">
-          Relevant coursework: Statistical Methods and Applications,
-          Mathematical Methods for Data Science, Policy Implementation.
-        </p>
+      <p class="section-label">Writing</p>
+      <div>
+        <ul class="post-list">
+          <li>
+            <a href="blog/hello-world.html">
+              <span class="post-title">hello, world</span>
+              <span class="post-date">2026-07-03</span>
+            </a>
+            <p class="post-excerpt">
+              The first post. Some notes on what this space is for.
+            </p>
+          </li>
+        </ul>
+        <p class="more-link"><a href="blog.html">all writing &rarr;</a></p>
       </div>
     </section>
 
     <hr class="rule" />
 
     <section>
-      <p class="section-label">Skills</p>
-      <dl class="skills">
-        <dt>Languages</dt>
-        <dd>English (native), German (native, DSD II C1), Spanish (advanced professional).</dd>
+      <p class="section-label">Projects</p>
+      <div>
+        <ul class="project-list">
+          <li>
+            <span class="project-name">this site</span>
+            <span class="project-desc">Hand-rolled HTML, CSS, and a scroll-driven vine.</span>
+          </li>
+          <li>
+            <span class="project-name">&mdash;</span>
+            <span class="project-desc">More soon. Edit <code>index.html</code> to add entries.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-        <dt>Technical</dt>
-        <dd>Python, R, SQL, Stata, scikit-learn, pandas, NumPy, Hugging Face transformers, NLP (sentiment analysis, embeddings), Git, BigQuery, Metabase.</dd>
+    <hr class="rule" />
 
-        <dt>Other</dt>
-        <dd>Adobe Suite, Photoshop, Lightroom, Premiere Pro, SketchUp, OBS.</dd>
-      </dl>
+    <section>
+      <p class="section-label">Ideas</p>
+      <div>
+        <ul class="ideas-list">
+          <li>Add short-form fragments here. Things too small to be posts.</li>
+          <li>Books worth revisiting. Papers to come back to.</li>
+          <li>Half-questions I haven't figured out how to answer yet.</li>
+        </ul>
+      </div>
     </section>
 
     <hr class="rule" />
 
     <section>
       <p class="section-label">Elsewhere</p>
-      <ul class="links">
-        <li><a href="mailto:lejury@uchicago.edu">lejury@uchicago.edu</a></li>
-        <li><a href="https://github.com/lej-ej">GitHub</a></li>
-      </ul>
+      <div>
+        <ul class="links">
+          <li><a href="https://github.com/lej-ej">github</a></li>
+        </ul>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>&copy; <span id="year"></span> Leja Ejury</p>
+    <p>&copy; <span id="year"></span></p>
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/vines.js"></script>
 </body>
 </html>

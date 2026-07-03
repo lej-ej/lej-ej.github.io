@@ -1,28 +1,28 @@
-# lej-ej.github.io
+# notes
 
-Personal site — published at https://lej-ej.github.io
+A small workspace at https://lej-ej.github.io — writing, ideas,
+and links to things being built.
 
 ## Structure
 
-- `index.html` — home / about
-- `blog.html` — blog index
+- `index.html` — home
+- `blog.html` — writing index
 - `blog/*.html` — individual posts
 - `private.html` — password-gated area
-- `css/style.css` — styles
-- `js/main.js` — shared JS (footer year, etc.)
+- `css/style.css` — deep-green, earthy-warm palette in Lekton
+- `js/main.js` — footer year
+- `js/vines.js` — scroll-driven vine animation
 - `js/gate.js` — client-side password gate
 
 ## Local preview
-
-Open `index.html` in a browser, or run:
 
 ```
 python3 -m http.server 8000
 ```
 
-Then visit http://localhost:8000
+Then http://localhost:8000
 
-## Changing the private-area password
+## Changing the private password
 
 Default password is `changeme`. To change it:
 
@@ -33,10 +33,18 @@ Default password is `changeme`. To change it:
    ```
 3. Paste the hex string into `PASSWORD_HASH` in `js/gate.js`.
 
-This gate is not real security — it's just a curtain for casual visitors.
+The gate is not real security — it's a curtain for casual visitors.
 
 ## Adding a blog post
 
 1. Copy `blog/hello-world.html` to `blog/your-slug.html`.
 2. Update the title, date, and content.
-3. Add a new `<li>` to the `post-list` in `blog.html`.
+3. Add a new `<li>` to the `post-list` in `blog.html` (and on the
+   home page if you want it featured).
+
+## Notes on the vines
+
+The scroll animation lives in `js/vines.js`. It draws SVG paths in
+`index.html`, `blog.html`, and `blog/hello-world.html` using
+`stroke-dashoffset` tied to page scroll progress. Leaves fade in
+at thresholds set via `data-threshold` (0–1). Adjust in the SVG.

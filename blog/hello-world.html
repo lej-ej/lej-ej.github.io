@@ -3,43 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello, world — Leja Ejury</title>
+  <title>hello, world — notes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
+  <div class="vines" aria-hidden="true">
+    <svg class="vine vine-left" viewBox="0 0 100 5000" preserveAspectRatio="xMidYMin slice">
+      <path class="vine-path" d="M 60 0 Q 20 200 60 400 T 60 800 T 60 1200 T 60 1600 T 60 2000 T 60 2400 T 60 2800" />
+      <g class="leaves">
+        <path class="leaf" data-threshold="0.08" transform="translate(30 400) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.25" transform="translate(85 800) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.45" transform="translate(30 1200) rotate(-30)" d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.65" transform="translate(85 1600) rotate(35)"  d="M 0 0 Q 12 -4 14 -14 Q 4 -18 0 0 Z" />
+      </g>
+    </svg>
+    <svg class="vine vine-right" viewBox="0 0 100 5000" preserveAspectRatio="xMidYMin slice">
+      <path class="vine-path" d="M 40 0 Q 80 200 40 400 T 40 800 T 40 1200 T 40 1600 T 40 2000 T 40 2400 T 40 2800" />
+      <g class="leaves">
+        <path class="leaf" data-threshold="0.15" transform="translate(70 400) rotate(30)"   d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.35" transform="translate(15 800) rotate(-35)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+        <path class="leaf" data-threshold="0.55" transform="translate(70 1200) rotate(30)"  d="M 0 0 Q -12 -4 -14 -14 Q -4 -18 0 0 Z" />
+      </g>
+    </svg>
+  </div>
+
   <header class="site-header">
-    <a href="../index.html" class="logo">Leja Ejury</a>
+    <a href="../index.html" class="logo">notes</a>
     <nav>
-      <a href="../index.html">About</a>
-      <a href="../blog.html" class="active">Blog</a>
-      <a href="../private.html">Private</a>
+      <a href="../index.html">home</a>
+      <a href="../blog.html" class="active">writing</a>
+      <a href="../private.html">private</a>
     </nav>
   </header>
 
   <main class="container post">
-    <p class="back"><a href="../blog.html">&larr; All posts</a></p>
+    <p class="back"><a href="../blog.html">&larr; all writing</a></p>
     <article>
       <header class="post-header">
-        <h1>Hello, world</h1>
+        <h1>hello, world</h1>
         <p class="post-meta">2026-07-03</p>
       </header>
 
       <p>
-        The obligatory first post. I'm setting this site up as a place
-        to keep notes, share writing, and occasionally publish something
-        longer.
+        First post. This space is for writing, notes, and links to
+        things I'm working on. Nothing here is finished.
       </p>
 
       <p>
-        A few things I want to write about here:
+        Some things I'll probably put here:
       </p>
       <ul>
-        <li>What I'm learning at school</li>
-        <li>Projects I'm building</li>
-        <li>Books and papers worth remembering</li>
+        <li>Long-form writing on things I'm thinking about</li>
+        <li>Short notes and fragments</li>
+        <li>Projects I want to remember or point people to</li>
       </ul>
 
       <p>
@@ -49,9 +68,10 @@
   </main>
 
   <footer class="site-footer">
-    <p>&copy; <span id="year"></span> Leja Ejury</p>
+    <p>&copy; <span id="year"></span></p>
   </footer>
 
   <script src="../js/main.js"></script>
+  <script src="../js/vines.js"></script>
 </body>
 </html>
