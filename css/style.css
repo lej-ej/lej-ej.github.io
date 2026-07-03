@@ -1,12 +1,12 @@
 :root {
-  --bg: #f2ecdc;
-  --ink: #1e2b1f;
-  --muted: #556555;
-  --faint: #8a8b76;
-  --rule: #d8cfb6;
-  --accent: #a44a24;
-  --vine: #3f5a37;
-  --leaf: #4a7040;
+  --bg: #ccc9a5;
+  --ink: #182415;
+  --muted: #3f5236;
+  --faint: #6d6f52;
+  --rule: #a29f7c;
+  --accent: #7a3a1a;
+  --vine: #253a20;
+  --leaf: #3d5c33;
   --content-width: 900px;
   --label-width: 160px;
   --gutter: 3rem;
@@ -93,30 +93,45 @@ hr.rule {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 100px;
+  width: 130px;
 }
 
-.vine-left { left: max(1rem, calc((100vw - var(--content-width)) / 2 - 110px)); }
-.vine-right { right: max(1rem, calc((100vw - var(--content-width)) / 2 - 110px)); }
+.vine-left  { left:  max(1rem, calc((100vw - var(--content-width)) / 2 - 140px)); }
+.vine-right { right: max(1rem, calc((100vw - var(--content-width)) / 2 - 140px)); }
 
-.vine-path {
+.vine-main {
   fill: none;
   stroke: var(--vine);
-  stroke-width: 1.5;
+  stroke-width: 2.6;
   stroke-linecap: round;
-  opacity: 0.7;
+  opacity: 0.92;
 }
 
-.leaf {
+.branch-path {
+  fill: none;
+  stroke: var(--vine);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  opacity: 0;
+  stroke-dashoffset: var(--length, 100);
+  transition: opacity 0.2s ease, stroke-dashoffset 0.9s ease-out;
+}
+
+.branch-leaf {
   fill: var(--leaf);
   opacity: 0;
   transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform-origin: 0 0;
+  transition: opacity 0.6s ease 0.35s;
 }
 
-.leaf.visible {
-  opacity: 0.75;
+.branch.visible .branch-path {
+  opacity: 0.9;
+  stroke-dashoffset: 0;
+}
+
+.branch.visible .branch-leaf {
+  opacity: 0.95;
 }
 
 /* ── header ────────────────────────────────────────── */
