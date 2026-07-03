@@ -1,236 +1,183 @@
-// Scroll-driven vine animation.
+// Scroll-driven ornamental vines: main stem + tendrils + leaves +
+// six-petal flowers + golden pollen. Fantasy / illuminated-manuscript
+// feel, not botanical realism.
 //
-// On load/resize:
-//  - Measure actual document height in pixels.
-//  - Size each vine SVG to that height (no clipping).
-//  - Generate a wavy main stem that fills the height.
-//  - Generate ~1 branch per 170px of document, with pseudo-random
-//    variation in position, length, angle, curl, and leaf count.
-//
-// On scroll:
-//  - Main stem draws from top down using stroke-dashoffset.
-//  - Branches pop-and-draw when scroll progress crosses their y-threshold.
+// Everything is inline SVG. The main stem draws itself over the full
+// scroll. Tendrils, leaves, flowers, and pollen appear one-by-one at
+// scroll thresholds. Pollen drifts continuously once revealed.
 
 (function () {
-  const SVG_NS = 'http://www.w3.org/2000/svg';
-  const WAVE_PERIOD = 380;         // px — wavelength of the main stem
-  const AMPLITUDE = 22;            // horizontal wave amplitude in viewBox units
-  const CENTER_X = 55;             // horizontal center of the vine
-  const VIEWBOX_W = 110;           // viewBox width — a bit wider than element width
+  // ── Vine content ──────────────────────────────────────────
+  // viewBox 300 × 1200. Stretched to fit the fixed .vine box.
 
-  // Deterministic pseudo-random from a seed integer, in [0, 1).
-  function rand(seed) {
-    const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
-    return x - Math.floor(x);
+  const MAIN_PATH = `
+    M 150 0
+    C 100 60 220 130 145 220
+    S 70 400 145 500
+    S 220 620 130 720
+    S 60 850 155 950
+    S 240 1080 140 1150
+    S 100 1180 150 1200
+  `.trim().replace(/\s+/g, ' ');
+
+  const TENDRILS = [
+    { t: 0.05, d: 'M 145 110 c 30 -12 55 15 25 30 c -20 10 -5 30 15 25 c 15 -4 20 -25 5 -30' },
+    { t: 0.12, d: 'M 175 220 c 35 10 50 -20 25 -40 c -25 -18 -55 5 -50 30 c 5 25 40 35 55 15 c 12 -16 -5 -30 -20 -25' },
+    { t: 0.20, d: 'M 115 340 c -30 -5 -55 20 -30 40 c 25 20 55 5 50 -20 c -3 -18 -30 -25 -40 -10 c -6 8 5 20 15 15' },
+    { t: 0.28, d: 'M 195 460 c 30 15 50 -20 25 -40 c -25 -18 -55 -5 -55 25 c 0 25 30 40 55 20 c 15 -12 -3 -25 -20 -18' },
+    { t: 0.36, d: 'M 110 580 c -35 5 -55 30 -25 45 c 25 12 50 -10 40 -30 c -8 -15 -30 -10 -30 5' },
+    { t: 0.44, d: 'M 200 700 c 25 -18 55 5 45 30 c -10 25 -50 25 -55 -5 c -3 -20 25 -30 40 -20 c 12 8 5 18 -8 15' },
+    { t: 0.52, d: 'M 125 820 c -40 15 -55 -10 -30 -35 c 25 -22 55 -12 60 15 c 3 25 -30 40 -50 30' },
+    { t: 0.60, d: 'M 190 930 c 40 20 55 -15 30 -35 c -25 -18 -55 -8 -55 20 c 0 22 25 35 45 25' },
+    { t: 0.68, d: 'M 105 1030 c -30 5 -45 30 -20 45 c 25 15 50 -10 45 -30 c -5 -15 -30 -12 -30 5' },
+    { t: 0.76, d: 'M 200 1110 c 30 -10 55 15 30 40 c -22 22 -55 5 -55 -20' },
+    { t: 0.82, d: 'M 130 1160 c -25 15 -45 -15 -20 -30 c 25 -12 50 5 50 25' },
+    { t: 0.88, d: 'M 205 1180 c 25 5 40 -25 20 -35 c -20 -8 -35 15 -20 25' },
+  ];
+
+  const LEAVES = [
+    { t: 0.03, cx: 170, cy:  55, rx:  8, ry: 14, rot: -15 },
+    { t: 0.10, cx: 115, cy: 180, rx:  5, ry:  9, rot:  25 },
+    { t: 0.16, cx: 200, cy: 275, rx: 11, ry: 18, rot: -25 },
+    { t: 0.24, cx: 100, cy: 400, rx:  6, ry: 11, rot:  30 },
+    { t: 0.32, cx: 215, cy: 510, rx: 12, ry: 20, rot: -15 },
+    { t: 0.40, cx: 100, cy: 625, rx:  8, ry: 14, rot:  25 },
+    { t: 0.48, cx: 205, cy: 755, rx: 11, ry: 18, rot: -20 },
+    { t: 0.56, cx: 115, cy: 875, rx:  7, ry: 12, rot:  30 },
+    { t: 0.64, cx: 195, cy: 975, rx: 10, ry: 17, rot: -15 },
+    { t: 0.72, cx: 115, cy: 1085, rx: 8, ry: 13, rot:  25 },
+    { t: 0.80, cx: 195, cy: 1145, rx: 9, ry: 15, rot: -30 },
+    { t: 0.86, cx: 130, cy: 1180, rx: 6, ry: 10, rot:  20 },
+  ];
+
+  const FLOWERS = [
+    { t: 0.15, x: 225, y:  345, r: 6 },
+    { t: 0.30, x:  95, y:  485, r: 7 },
+    { t: 0.48, x: 225, y:  700, r: 5.5 },
+    { t: 0.65, x:  90, y:  905, r: 7.5 },
+    { t: 0.82, x: 205, y: 1080, r: 6.5 },
+  ];
+
+  const POLLEN = [
+    { t: 0.08, cx:  60, cy: 180, r: 2 },
+    { t: 0.14, cx: 245, cy: 290, r: 1.5 },
+    { t: 0.20, cx:  85, cy: 425, r: 2.5 },
+    { t: 0.28, cx: 230, cy: 555, r: 1.5 },
+    { t: 0.36, cx:  70, cy: 665, r: 2 },
+    { t: 0.42, cx: 220, cy: 790, r: 2.5 },
+    { t: 0.50, cx:  65, cy: 890, r: 1.5 },
+    { t: 0.58, cx: 235, cy: 980, r: 2 },
+    { t: 0.65, cx:  80, cy: 1080, r: 2.5 },
+    { t: 0.72, cx: 240, cy: 1150, r: 1.5 },
+    { t: 0.05, cx:  55, cy:  90, r: 1.5 },
+    { t: 0.55, cx: 155, cy: 850, r: 2 },
+  ];
+
+  // ── SVG builder ───────────────────────────────────────────
+  function buildSvg() {
+    const flower = (f) => `
+      <g class="flower" data-threshold="${f.t}" transform="translate(${f.x} ${f.y})">
+        <circle cx="0"   cy="-${(f.r + 3)}" r="${f.r}"/>
+        <circle cx="${(f.r + 2)}"  cy="-${(f.r * 0.4).toFixed(1)}"  r="${f.r}"/>
+        <circle cx="${(f.r + 2)}"  cy="${(f.r * 0.6).toFixed(1)}"   r="${f.r}"/>
+        <circle cx="0"   cy="${(f.r + 4)}"  r="${f.r}"/>
+        <circle cx="-${(f.r + 2)}" cy="${(f.r * 0.6).toFixed(1)}"   r="${f.r}"/>
+        <circle cx="-${(f.r + 2)}" cy="-${(f.r * 0.4).toFixed(1)}"  r="${f.r}"/>
+        <circle class="flower-center" cx="0" cy="0" r="${(f.r * 0.55).toFixed(1)}"/>
+      </g>`;
+
+    return `<svg viewBox="0 0 300 1200" preserveAspectRatio="none">
+      <path class="main-vine" d="${MAIN_PATH}"/>
+      ${TENDRILS.map(t => `<path class="tendril" data-threshold="${t.t}" d="${t.d}"/>`).join('')}
+      ${LEAVES.map(l => `<ellipse class="leaf" data-threshold="${l.t}" cx="${l.cx}" cy="${l.cy}" rx="${l.rx}" ry="${l.ry}" transform="rotate(${l.rot} ${l.cx} ${l.cy})"/>`).join('')}
+      ${FLOWERS.map(flower).join('')}
+      ${POLLEN.map(p => `<circle class="pollen" data-threshold="${p.t}" cx="${p.cx}" cy="${p.cy}" r="${p.r}"/>`).join('')}
+    </svg>`;
   }
 
-  // Estimate stem x-coordinate at a given y for a given side.
-  function stemXAt(y, side) {
-    const phase = (y / (WAVE_PERIOD * 2)) * 2 * Math.PI;
-    const sign = side === 'left' ? -1 : 1;
-    return CENTER_X + sign * Math.sin(phase) * AMPLITUDE;
-  }
+  // ── Inject SVG into both vine containers ──────────────────
+  const containers = document.querySelectorAll('.vine');
+  if (!containers.length) return;
+  containers.forEach((el) => { el.innerHTML = buildSvg(); });
 
-  function specForBranch(i, side, docHeight) {
-    // Base y-position, evenly spaced with jitter for irregularity.
-    const per = Math.max(140, docHeight / 20);
-    const yBase = 60 + i * per;
-    const yJitter = (rand(i * 3 + 1) - 0.5) * (per * 0.6);
-    const y = Math.max(30, Math.min(docHeight - 30, yBase + yJitter));
+  // ── Cache draw-paths and measure lengths ──────────────────
+  const drawPaths = document.querySelectorAll('.main-vine, .tendril');
+  drawPaths.forEach((p) => {
+    const len = p.getTotalLength();
+    p.dataset.length = String(len);
+    p.style.strokeDasharray = String(len);
+    p.style.strokeDashoffset = String(len);
+  });
 
-    const stemX = stemXAt(y, side);
+  const mainPaths  = document.querySelectorAll('.main-vine');
+  const tendrils   = document.querySelectorAll('.tendril');
+  const leafEls    = document.querySelectorAll('.leaf');
+  const flowerEls  = document.querySelectorAll('.flower');
+  const pollenEls  = document.querySelectorAll('.pollen');
 
-    // Direction: extend outward from the wave (branches leave the stem
-    // in the direction it's already leaning).
-    const outward = stemX < CENTER_X ? -1 : 1;
-    // Occasionally reverse for variety.
-    const dir = rand(i * 5 + 2) < 0.15 ? -outward : outward;
-
-    // Length varies from short tendril to long branch.
-    const lenR = rand(i * 7 + 3);
-    const length = 18 + lenR * 70;
-
-    // Tip position.
-    const angleJit = (rand(i * 11 + 4) - 0.5) * 55;
-    const tx = stemX + dir * length;
-    const ty = y + angleJit;
-
-    // Control point defines the curve shape.
-    const cxJit = (rand(i * 13 + 5) - 0.5) * 25;
-    const cx = stemX + dir * length * 0.35 + cxJit;
-    const cy = y + (rand(i * 17 + 6) - 0.5) * 35;
-
-    // Leaf orientation.
-    const rot = dir * (25 + rand(i * 19 + 7) * 65);
-
-    // Sometimes clusters (extra leaf), sometimes curls at the tip.
-    const cluster = rand(i * 23 + 8) > 0.5;
-    const curl = rand(i * 29 + 9) > 0.65;
-    const size = 0.75 + rand(i * 31 + 10) * 0.55; // leaf scale
-
-    return { ox: stemX, oy: y, tx, ty, cx, cy, rot, dir, cluster, curl, size };
-  }
-
-  function makeBranch(spec) {
-    const g = document.createElementNS(SVG_NS, 'g');
-    g.setAttribute('class', 'branch');
-
-    // --- branch path (with optional curl at the tip) ---
-    const path = document.createElementNS(SVG_NS, 'path');
-    path.setAttribute('class', 'branch-path');
-    let d = `M ${spec.ox.toFixed(2)} ${spec.oy.toFixed(2)} `
-          + `Q ${spec.cx.toFixed(2)} ${spec.cy.toFixed(2)} `
-          + `${spec.tx.toFixed(2)} ${spec.ty.toFixed(2)}`;
-    if (spec.curl) {
-      const d1 = spec.dir;
-      // Small hook/curl at the tip
-      d += ` q ${(-d1 * 4).toFixed(2)} ${(-6).toFixed(2)} `
-        + `${(-d1 * 8).toFixed(2)} ${(-2).toFixed(2)} `
-        + `q ${(-d1 * 4).toFixed(2)} ${(4).toFixed(2)} `
-        + `${(-d1 * 2).toFixed(2)} ${(8).toFixed(2)}`;
-    }
-    path.setAttribute('d', d);
-    g.appendChild(path);
-
-    // --- main leaf ---
-    const s = spec.size;
-    const d1 = spec.dir;
-    const leaf1 = document.createElementNS(SVG_NS, 'path');
-    leaf1.setAttribute('class', 'branch-leaf');
-    leaf1.setAttribute(
-      'transform',
-      `translate(${spec.tx.toFixed(2)} ${spec.ty.toFixed(2)}) rotate(${spec.rot.toFixed(1)}) scale(${s.toFixed(2)})`
-    );
-    leaf1.setAttribute(
-      'd',
-      `M 0 0 Q ${d1 * 12} -3 ${d1 * 15} -15 Q ${d1 * 4} -19 0 0 Z`
-    );
-    g.appendChild(leaf1);
-
-    // --- clustered second leaf (smaller, opposite tilt) ---
-    if (spec.cluster) {
-      const leaf2 = document.createElementNS(SVG_NS, 'path');
-      leaf2.setAttribute('class', 'branch-leaf');
-      leaf2.setAttribute(
-        'transform',
-        `translate(${(spec.tx + d1 * -3).toFixed(2)} ${(spec.ty + 3).toFixed(2)}) rotate(${(-spec.rot * 0.55).toFixed(1)}) scale(${(s * 0.75).toFixed(2)})`
-      );
-      leaf2.setAttribute(
-        'd',
-        `M 0 0 Q ${d1 * 9} -2 ${d1 * 11} -11 Q ${d1 * 3} -14 0 0 Z`
-      );
-      g.appendChild(leaf2);
-    }
-
-    return { group: g, path };
-  }
-
-  function setupVine(svg, docHeight) {
-    const side = svg.classList.contains('vine-left') ? 'left' : 'right';
-
-    svg.setAttribute('viewBox', `0 0 ${VIEWBOX_W} ${docHeight}`);
-    svg.style.height = docHeight + 'px';
-
-    // --- main stem: wavy path spanning docHeight ---
-    const numWaves = Math.max(4, Math.round(docHeight / WAVE_PERIOD));
-    const period = docHeight / numWaves;
-    const halfPeriodOffset = side === 'left' ? -AMPLITUDE : AMPLITUDE;
-    let stemD = `M ${CENTER_X} 0 Q ${CENTER_X + halfPeriodOffset} ${(period / 2).toFixed(2)} ${CENTER_X} ${period.toFixed(2)}`;
-    for (let i = 1; i < numWaves; i++) {
-      stemD += ` T ${CENTER_X} ${((i + 1) * period).toFixed(2)}`;
-    }
-    const stemPath = svg.querySelector('.vine-main');
-    stemPath.setAttribute('d', stemD);
-
-    // --- branches ---
-    const bg = svg.querySelector('.branches');
-    bg.innerHTML = '';
-    const numBranches = Math.max(8, Math.floor(docHeight / 170));
-    // Small side-specific salt so left and right vines aren't identical
-    const salt = side === 'left' ? 0 : 1000;
-    const branches = [];
-    for (let i = 0; i < numBranches; i++) {
-      const spec = specForBranch(i + salt, side, docHeight);
-      const { group, path } = makeBranch(spec);
-      bg.appendChild(group);
-      const len = path.getTotalLength();
-      path.style.setProperty('--length', String(len));
-      path.style.strokeDasharray = String(len);
-      const threshold = Math.max(0, spec.oy / docHeight - 0.03);
-      group.dataset.threshold = String(threshold);
-      branches.push(group);
-    }
-
-    return { branches, stemPath };
-  }
-
-  let state = null;
-
-  function setupAll() {
-    const docHeight = document.documentElement.scrollHeight;
-    const container = document.querySelector('.vines');
-    if (container) container.style.height = docHeight + 'px';
-
-    const branches = [];
-    const mainPaths = [];
-    document.querySelectorAll('.vine').forEach((v) => {
-      const r = setupVine(v, docHeight);
-      branches.push(...r.branches);
-      if (r.stemPath) mainPaths.push(r.stemPath);
-    });
-
-    const mainLengths = new WeakMap();
-    mainPaths.forEach((p) => {
-      const len = p.getTotalLength();
-      mainLengths.set(p, len);
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
-    });
-
-    state = { branches, mainPaths, mainLengths, docHeight };
-    update();
-  }
+  // ── Scroll-driven update ──────────────────────────────────
+  const TENDRIL_DUR = 0.14;
+  const LEAF_DUR    = 0.09;
+  const FLOWER_DUR  = 0.10;
 
   function scrollProgress() {
-    const scrollable =
-      document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollable <= 0) return 1;
-    return Math.max(0, Math.min(1, window.scrollY / scrollable));
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max <= 0) return 1;
+    return Math.max(0, Math.min(1, window.scrollY / max));
   }
 
   function update() {
-    if (!state) return;
     const p = scrollProgress();
-    state.mainPaths.forEach((path) => {
-      const len = state.mainLengths.get(path);
-      path.style.strokeDashoffset = len * (1 - p);
+
+    // Main stem — draws smoothly over full scroll
+    mainPaths.forEach((path) => {
+      const len = parseFloat(path.dataset.length);
+      path.style.strokeDashoffset = String(len * (1 - p));
     });
-    state.branches.forEach((b) => {
-      const t = parseFloat(b.dataset.threshold || '0');
-      b.classList.toggle('visible', p >= t);
+
+    // Tendrils — draw locally once threshold crossed
+    tendrils.forEach((path) => {
+      const t = parseFloat(path.dataset.threshold || '0');
+      const local = Math.max(0, Math.min(1, (p - t) / TENDRIL_DUR));
+      const len = parseFloat(path.dataset.length);
+      path.style.strokeDashoffset = String(len * (1 - local));
+    });
+
+    // Leaves — fade + scale + rotate
+    leafEls.forEach((el) => {
+      const t = parseFloat(el.dataset.threshold || '0');
+      const k = Math.max(0, Math.min(1, (p - t) / LEAF_DUR));
+      el.style.opacity = String(k);
+      el.style.scale = String(0.3 + 0.7 * k);
+      el.style.rotate = `${-25 + 50 * k}deg`;
+    });
+
+    // Flowers — bloom (opacity + scale + slight rotate)
+    flowerEls.forEach((el) => {
+      const t = parseFloat(el.dataset.threshold || '0');
+      const k = Math.max(0, Math.min(1, (p - t) / FLOWER_DUR));
+      el.style.opacity = String(k);
+      el.style.scale = String(0.15 + 0.85 * k);
+      el.style.rotate = `${-20 + 40 * k}deg`;
+    });
+
+    // Pollen — reveal on threshold, then CSS handles drift
+    pollenEls.forEach((el) => {
+      const t = parseFloat(el.dataset.threshold || '0');
+      el.classList.toggle('revealed', p >= t);
     });
   }
 
   let ticking = false;
   function onScroll() {
     if (!ticking) {
-      requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
+      requestAnimationFrame(() => { update(); ticking = false; });
       ticking = true;
     }
   }
 
-  let resizeTimer = null;
-  function onResize() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(setupAll, 150);
-  }
-
-  setupAll();
-  // Re-run after fonts/images load to catch any final layout changes.
-  window.addEventListener('load', setupAll);
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onResize);
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', update);
+  update();
 })();

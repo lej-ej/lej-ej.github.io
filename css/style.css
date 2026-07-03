@@ -77,61 +77,83 @@ hr.rule {
   margin: 3rem 0;
 }
 
-/* ── vines ─────────────────────────────────────────── */
-.vines {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
+/* ── vines: fixed, ornamental, scroll-driven ───────── */
 .vine {
-  position: absolute;
+  position: fixed;
   top: 0;
-  width: 110px;
+  width: 240px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 3;
   overflow: visible;
 }
 
-.vine-left  { left:  max(1rem, calc((100vw - var(--content-width)) / 2 - 120px)); }
-.vine-right { right: max(1rem, calc((100vw - var(--content-width)) / 2 - 120px)); }
+.vine-left  { left: -60px; }
+.vine-right { right: -60px; transform: scaleX(-1); }
 
-.vine-main {
-  fill: none;
-  stroke: var(--vine);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  opacity: 0.92;
+.vine svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
 }
 
-.branch-path {
+.main-vine {
   fill: none;
-  stroke: var(--vine);
-  stroke-width: 1.9;
+  stroke: #1a3315;
+  stroke-width: 4;
   stroke-linecap: round;
-  opacity: 0;
-  stroke-dashoffset: var(--length, 100);
-  transition: opacity 0.2s ease, stroke-dashoffset 0.9s ease-out;
+  stroke-linejoin: round;
 }
 
-.branch-leaf {
-  fill: var(--leaf);
+.tendril {
+  fill: none;
+  stroke: #2a4a24;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.leaf {
+  fill: #4e8f48;
   opacity: 0;
   transform-box: fill-box;
-  transform-origin: 0 0;
-  transition: opacity 0.6s ease 0.35s;
+  transform-origin: center;
+  transition: opacity 0.5s ease;
 }
 
-.branch.visible .branch-path {
-  opacity: 0.9;
-  stroke-dashoffset: 0;
+.flower {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.6s ease;
 }
 
-.branch.visible .branch-leaf {
-  opacity: 0.95;
+.flower circle:nth-child(1) { fill: #f6b8d2; }
+.flower circle:nth-child(2) { fill: #c6b7ff; }
+.flower circle:nth-child(3) { fill: #ffe88b; }
+.flower circle:nth-child(4) { fill: #b7f0b5; }
+.flower circle:nth-child(5) { fill: #ffd0b4; }
+.flower circle:nth-child(6) { fill: #e8c7ff; }
+.flower .flower-center { fill: #ffd84a; }
+
+.pollen {
+  fill: #ffd84a;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(255, 216, 74, 0.7));
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.8s ease;
+}
+
+.pollen.revealed {
+  opacity: 0.85;
+  animation: pollen-drift 5s ease-in-out infinite alternate;
+}
+
+@keyframes pollen-drift {
+  from { translate: 0 8px; }
+  to   { translate: 0 -8px; }
 }
 
 /* ── header ────────────────────────────────────────── */
@@ -431,8 +453,8 @@ hr.rule {
 }
 
 /* ── smaller desktop: hide vines to avoid content overlap ─── */
-@media (max-width: 1049px) {
-  .vines { display: none; }
+@media (max-width: 1149px) {
+  .vine { display: none; }
 }
 
 /* ── narrow screens: single-column ─────────────────── */
