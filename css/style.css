@@ -1,25 +1,22 @@
 /*
-  Painterly, abstract-expressionist, angular, nature-focused.
-  Palette pulled from oil-pigment landscape work: deep pine bg,
-  cream text, ochre + moss + slate as painterly accents.
+  Palette pulled from the paper-cut background image:
+  deep teal, warm browns, rust orange, cream highlights.
+  Image is used directly as the fixed body background.
 */
 
 :root {
-  --bg: #1a1f19;
-  --ink: #eadcb8;
-  --muted: #b8a97f;
-  --faint: #857858;
-  --rule: #3d3b25;
-  --accent: #d78535;
-  --ochre: #c8843a;
-  --moss:  #4a6b3e;
-  --slate: #3d5266;
-  --earth: #8a3a24;
-  --gold:  #d4a02c;
-  --bone:  #eadcb8;
+  --bg: #1e3040;
+  --ink: #f2dab0;
+  --muted: #c9b092;
+  --faint: #9c8672;
+  --rule: #4a3a28;
+  --accent: #d4772c;
+  --gold:   #e8b56a;
+  --teal:   #2c4a5a;
+  --brown:  #7a5a42;
+  --rust:   #c5722c;
+  --cream:  #f2dab0;
   --content-width: 900px;
-  --label-width: 200px;
-  --gutter: 3rem;
 }
 
 * {
@@ -36,6 +33,13 @@ html {
 
 body {
   background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(15, 22, 30, 0.35), rgba(15, 22, 30, 0.45)),
+    url("../bg.avif");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--ink);
   font-family: 'Lekton', 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
   line-height: 1.65;
@@ -46,27 +50,15 @@ body {
   overflow-x: hidden;
 }
 
-/* ── canvas background: painterly texture ─────────── */
-.canvas-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-.canvas-bg svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
 /* ── typography ────────────────────────────────────── */
 h1, h2, h3 {
   font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
   font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  color: var(--ink);
   font-style: italic;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
 }
 
 h1 { font-size: 5.5rem; margin-bottom: 1.2rem; }
@@ -78,8 +70,8 @@ p { margin-bottom: 1rem; }
 a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(215, 133, 53, 0.4);
-  transition: border-color 0.2s ease, color 0.2s ease;
+  border-bottom: 1px solid rgba(212, 119, 44, 0.4);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 a:hover {
   color: var(--gold);
@@ -94,18 +86,17 @@ em, i {
 
 code {
   font-family: 'Lekton', monospace;
-  background: rgba(215, 133, 53, 0.12);
+  background: rgba(212, 119, 44, 0.14);
   padding: 0.05em 0.35em;
   border-radius: 3px;
   font-size: 0.92em;
-  color: var(--ochre);
+  color: var(--gold);
 }
 
 hr.rule {
   border: none;
-  height: 40px;
+  border-top: 1px solid rgba(242, 218, 176, 0.15);
   margin: 3rem 0;
-  background: transparent;
 }
 
 /* ── site header ───────────────────────────────────── */
@@ -128,9 +119,10 @@ hr.rule {
   font-style: italic;
   font-size: 1.4rem;
   font-weight: 400;
-  color: var(--bone);
+  color: var(--cream);
   border-bottom: none;
   letter-spacing: -0.01em;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
 }
 .logo:hover { border-bottom: none; color: var(--gold); }
 
@@ -145,10 +137,11 @@ hr.rule {
   border-bottom: none;
   letter-spacing: 0.05em;
   text-transform: lowercase;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
 }
 .site-header nav a.active,
 .site-header nav a:hover {
-  color: var(--bone);
+  color: var(--cream);
   border-bottom: none;
 }
 
@@ -163,96 +156,70 @@ hr.rule {
   z-index: 1;
 }
 
-/* ── hero: huge display type over painterly landscape ─ */
+/* ── hero ──────────────────────────────────────────── */
 .hero {
-  position: relative;
-  padding: 3rem 0 6rem;
-  margin-bottom: 2rem;
+  padding: 3rem 0 4rem;
+  margin-bottom: 1rem;
 }
-
-.hero-art {
-  position: absolute;
-  inset: -2rem -30rem 0 -30rem;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-.hero-art svg { width: 100%; height: 100%; display: block; }
-
 .hero h1 {
-  position: relative;
-  z-index: 1;
-  font-size: 9rem;
-  line-height: 0.9;
+  font-size: 8rem;
+  line-height: 0.92;
   margin-bottom: 1.5rem;
-  color: var(--bone);
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
 }
-
 .hero .lede {
-  position: relative;
-  z-index: 1;
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 1.5rem;
-  line-height: 1.3;
-  color: var(--bone);
+  font-size: 1.4rem;
+  line-height: 1.35;
+  color: var(--cream);
   max-width: 34rem;
   margin-bottom: 1rem;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* ── section labels: huge italic, asymmetric ───────── */
+/* ── section labels ────────────────────────────────── */
 .section-label {
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 3.5rem;
-  line-height: 0.9;
+  font-size: 3rem;
+  line-height: 0.95;
   letter-spacing: -0.02em;
-  color: var(--ochre);
-  margin-bottom: 2rem;
+  color: var(--rust);
+  margin-bottom: 1.5rem;
   text-transform: lowercase;
   display: block;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
 }
 
-/* Sections alternate flush left/right for looseness */
 main.container > section:not(.hero) {
   margin-bottom: 1.5rem;
   padding: 1.5rem 0;
-  position: relative;
-}
-
-main.container > section:nth-of-type(odd of :not(.hero)) .section-label {
-  text-align: left;
-}
-main.container > section:nth-of-type(even of :not(.hero)) .section-label {
-  text-align: right;
-  margin-right: 0;
 }
 
 /* ── content elements ──────────────────────────────── */
 .now-list,
 .links,
 .ideas-list,
-.project-list {
+.project-list,
+.post-list {
   list-style: none;
 }
 
 .ideas-list li {
-  padding: 0.7rem 0;
+  padding: 0.6rem 0;
   color: var(--ink);
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   line-height: 1.4;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid rgba(242, 218, 176, 0.12);
 }
 .ideas-list li:first-child { border-top: none; padding-top: 0; }
 
 .project-list li {
-  padding: 1rem 0;
-  border-top: 1px solid var(--rule);
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(242, 218, 176, 0.12);
   display: flex;
   gap: 1.5rem;
   align-items: baseline;
@@ -264,31 +231,24 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
   font-style: italic;
   font-weight: 700;
   color: var(--gold);
-  min-width: 160px;
-  font-size: 1.15rem;
+  min-width: 150px;
+  font-size: 1.1rem;
 }
-.project-desc {
-  color: var(--muted);
-  font-size: 1rem;
-}
+.project-desc { color: var(--muted); font-size: 1rem; }
 
-.links li {
-  padding: 0.25rem 0;
+.links li { padding: 0.25rem 0; font-size: 1.05rem; }
+
+.more-link {
+  margin-top: 1rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
   font-size: 1.05rem;
 }
 
-.more-link {
-  margin-top: 1.5rem;
-  font-family: 'Fraunces', Georgia, serif;
-  font-style: italic;
-  font-size: 1.1rem;
-}
-
 /* ── blog list ─────────────────────────────────────── */
-.post-list { list-style: none; }
 .post-list li {
-  padding: 1.6rem 0;
-  border-top: 1px solid var(--rule);
+  padding: 1.4rem 0;
+  border-top: 1px solid rgba(242, 218, 176, 0.12);
 }
 .post-list li:first-child { border-top: none; padding-top: 0.5rem; }
 .post-list li:last-child { border-bottom: none; }
@@ -299,17 +259,18 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
   align-items: baseline;
   gap: 1rem;
   border-bottom: none;
-  color: var(--bone);
+  color: var(--cream);
 }
-.post-list a:hover .post-title { color: var(--ochre); }
+.post-list a:hover .post-title { color: var(--rust); }
 
 .post-title {
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 400;
   letter-spacing: -0.01em;
   transition: color 0.2s ease;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
 }
 .post-date {
   color: var(--faint);
@@ -321,7 +282,7 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
 .post-excerpt {
   color: var(--muted);
   margin-top: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
 }
@@ -340,8 +301,17 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
   font-variant-numeric: tabular-nums;
 }
 .post article ul { margin: 0 0 1rem 1.5rem; }
-.post article li { margin-bottom: 0.3rem; font-family: 'Fraunces', Georgia, serif; font-style: italic; }
-.post article p { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-size: 1.15rem; line-height: 1.5; }
+.post article li {
+  margin-bottom: 0.3rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+}
+.post article p {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.5;
+}
 
 /* ── private gate ──────────────────────────────────── */
 .gate {
@@ -365,22 +335,22 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
 }
 .gate-form input {
   padding: 0.8rem 1rem;
-  border: 1px solid var(--rule);
+  border: 1px solid rgba(242, 218, 176, 0.2);
   border-radius: 2px;
   font-size: 1rem;
   font-family: 'Lekton', monospace;
-  background: rgba(234, 220, 184, 0.06);
+  background: rgba(15, 22, 30, 0.4);
   color: var(--ink);
 }
 .gate-form input:focus {
   outline: none;
-  border-color: var(--ochre);
+  border-color: var(--rust);
 }
 .gate-form button,
 .lock-btn {
   padding: 0.8rem 1rem;
-  background: var(--ochre);
-  color: var(--bg);
+  background: var(--rust);
+  color: #1a1f19;
   border: none;
   border-radius: 2px;
   font-size: 0.95rem;
@@ -395,20 +365,11 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
 .lock-btn {
   background: transparent;
   color: var(--muted);
-  border: 1px solid var(--rule);
+  border: 1px solid rgba(242, 218, 176, 0.2);
   margin-top: 2rem;
 }
-.gate-error {
-  color: var(--earth);
-  font-size: 0.9rem;
-  font-family: 'Lekton', monospace;
-}
-.note {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-top: 1rem;
-  font-family: 'Lekton', monospace;
-}
+.gate-error { color: #d97a5e; font-size: 0.9rem; font-family: 'Lekton', monospace; }
+.note { font-size: 0.85rem; color: var(--muted); margin-top: 1rem; font-family: 'Lekton', monospace; }
 
 /* ── footer ────────────────────────────────────────── */
 .site-footer {
@@ -424,26 +385,15 @@ main.container > section:nth-of-type(even of :not(.hero)) .section-label {
   z-index: 1;
 }
 
-/* ── painterly angular divider ─────────────────────── */
-.painterly-rule {
-  width: 100%;
-  height: 60px;
-  margin: 1rem 0 2rem;
-  position: relative;
-  overflow: visible;
-}
-.painterly-rule svg { width: 100%; height: 100%; display: block; }
-
 /* ── narrower screens ──────────────────────────────── */
 @media (max-width: 819px) {
   html { font-size: 16px; }
-  .hero h1 { font-size: 4.5rem; }
-  .hero .lede { font-size: 1.25rem; }
-  .section-label { font-size: 2.5rem; }
-  .post-title { font-size: 1.4rem; }
+  .hero h1 { font-size: 4rem; }
+  .hero .lede { font-size: 1.2rem; }
+  .section-label { font-size: 2.2rem; }
+  .post-title { font-size: 1.35rem; }
   .container { padding-top: 1.5rem; }
   .post-list a { flex-direction: column; gap: 0.2rem; }
   .project-list li { flex-direction: column; gap: 0.2rem; }
   .project-name { min-width: 0; }
-  .hero-art { inset: -2rem -5rem 0 -5rem; }
 }
