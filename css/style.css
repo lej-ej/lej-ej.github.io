@@ -35,7 +35,7 @@ body {
   background-color: var(--bg);
   background-image:
     linear-gradient(rgba(15, 22, 30, 0.35), rgba(15, 22, 30, 0.45)),
-    url("../bg.avif");
+    url("../bg.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
