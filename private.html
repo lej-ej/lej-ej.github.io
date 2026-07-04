@@ -39,19 +39,45 @@
     </section>
 
     <section id="content" class="private-content" hidden>
-      <h1>private notes</h1>
-      <p class="lede">Draft space. Only for me.</p>
+      <div class="editor">
+        <div class="editor-topbar">
+          <select id="draft-select" class="draft-select" aria-label="select draft"></select>
+          <div class="editor-actions">
+            <button class="btn" id="new-draft" type="button">+ new</button>
+            <button class="btn btn-secondary" id="export-md" type="button">export .md</button>
+            <button class="btn btn-secondary" id="export-html" type="button">export .html</button>
+            <button class="btn btn-secondary btn-danger" id="delete-draft" type="button">delete</button>
+          </div>
+        </div>
 
-      <article>
-        <h2>Journal</h2>
-        <p>
-          Add whatever you want here &mdash; private drafts, a running
-          journal, half-formed thoughts. Edit <code>private.html</code>
-          to change this.
+        <input
+          class="draft-title"
+          type="text"
+          id="draft-title"
+          placeholder="untitled"
+          autocomplete="off"
+          spellcheck="true"
+        />
+
+        <textarea
+          class="draft-body"
+          id="draft-body"
+          placeholder="start writing&hellip;"
+          spellcheck="true"
+        ></textarea>
+
+        <div class="editor-footer">
+          <p class="save-status" id="save-status">&mdash;</p>
+          <button id="lock-btn" class="lock-btn" type="button">lock</button>
+        </div>
+
+        <p class="editor-note">
+          drafts save to this browser's local storage. they aren't
+          synced across devices. use export .md to keep a backup, or
+          export .html to publish a post &mdash; save the file into
+          <code>blog/</code> and add a link on <code>blog.html</code>.
         </p>
-      </article>
-
-      <p><button id="lock-btn" class="lock-btn">lock again</button></p>
+      </div>
     </section>
   </main>
 
@@ -60,6 +86,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/editor.js"></script>
   <script src="js/gate.js"></script>
 </body>
 </html>

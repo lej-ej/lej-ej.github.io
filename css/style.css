@@ -371,6 +371,145 @@ main.container > section:not(.hero) {
 .gate-error { color: #d97a5e; font-size: 0.9rem; font-family: 'Lekton', monospace; }
 .note { font-size: 0.85rem; color: var(--muted); margin-top: 1rem; font-family: 'Lekton', monospace; }
 
+/* ── editor (private area) ─────────────────────────── */
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1rem 0 3rem;
+}
+
+.editor-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.draft-select {
+  padding: 0.55rem 0.75rem;
+  background: rgba(15, 22, 30, 0.55);
+  color: var(--ink);
+  border: 1px solid rgba(242, 218, 176, 0.2);
+  border-radius: 2px;
+  font-family: 'Lekton', monospace;
+  font-size: 0.9rem;
+  min-width: 260px;
+  max-width: 100%;
+  cursor: pointer;
+}
+.draft-select:focus {
+  outline: none;
+  border-color: var(--rust);
+}
+
+.editor-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.55rem 0.85rem;
+  background: var(--rust);
+  color: #1a1f19;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Lekton', monospace;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover { background: var(--gold); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(242, 218, 176, 0.2);
+}
+.btn-secondary:hover {
+  color: var(--cream);
+  border-color: var(--rust);
+  background: transparent;
+}
+
+.btn-danger:hover {
+  color: #ffb99c;
+  border-color: #d97a5e;
+}
+
+.draft-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2.6rem;
+  line-height: 1.15;
+  color: var(--cream);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(242, 218, 176, 0.18);
+  padding: 0.4rem 0 0.6rem;
+  outline: none;
+  width: 100%;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+.draft-title::placeholder {
+  color: var(--faint);
+  font-style: italic;
+}
+.draft-title:focus { border-bottom-color: var(--rust); }
+
+.draft-body {
+  font-family: 'Lekton', monospace;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+  background: rgba(15, 22, 30, 0.4);
+  border: 1px solid rgba(242, 218, 176, 0.15);
+  border-radius: 3px;
+  padding: 1.2rem 1.3rem;
+  min-height: 55vh;
+  resize: vertical;
+  outline: none;
+  width: 100%;
+}
+.draft-body::placeholder { color: var(--faint); }
+.draft-body:focus { border-color: var(--rust); }
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.save-status {
+  color: var(--faint);
+  font-family: 'Lekton', monospace;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.editor-note {
+  color: var(--faint);
+  font-size: 0.8rem;
+  font-family: 'Lekton', monospace;
+  line-height: 1.55;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(242, 218, 176, 0.1);
+}
+.editor-note code {
+  font-size: 0.85em;
+  color: var(--muted);
+  background: rgba(212, 119, 44, 0.1);
+}
+
 /* ── footer ────────────────────────────────────────── */
 .site-footer {
   max-width: var(--content-width);
